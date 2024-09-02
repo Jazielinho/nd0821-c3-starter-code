@@ -1,0 +1,6 @@
+outs:
+- md5: cd49d8bf0d8408a57a516b72247936c3
+  size: 455
+  isexec: true
+  hash: md5
+  path: lb.joblib
