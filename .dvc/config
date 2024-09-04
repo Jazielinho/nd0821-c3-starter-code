@@ -1,4 +1,6 @@
 [core]
-    remote = local_remote
-['remote "local_remote"']
-    url = /root/dvc_remote
+    remote = dagshub_remote
+['remote "gdrive_remote"']
+    url = gdrive://18Z0GJznORxhTj0yIpyqimUQRfjCkaa9n
+['remote "dagshub_remote"']
+    url = https://dagshub.com/Jazielinho/nd0821-c3-starter-code.dvc

@@ -3,3 +3,4 @@ outs:
   size: 4007019
   hash: md5
   path: census.csv
+  isexec: true
