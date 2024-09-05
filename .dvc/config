@@ -1,6 +1,7 @@
 [core]
-    remote = dagshub_remote
+    remote = gdrive_remote
 ['remote "gdrive_remote"']
-    url = gdrive://18Z0GJznORxhTj0yIpyqimUQRfjCkaa9n
+    url = gdrive://1hr7xBGslXkKzB6pzv72rQMXjOfB1b7rx
+    gdrive_use_service_account = false
 ['remote "dagshub_remote"']
     url = https://dagshub.com/Jazielinho/nd0821-c3-starter-code.dvc
