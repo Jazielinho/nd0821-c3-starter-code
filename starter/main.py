@@ -3,6 +3,7 @@ import pandas as pd
 import joblib
 import os
 import subprocess
+import logging
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
@@ -10,16 +11,39 @@ from starter.starter.ml.model import inference
 from starter.starter.ml.data import process_data
 
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+def run_dvc_commands():
+    try:
+        for dir_name in ['dvc-cache', 'dvc-tmp', 'dvc-state']:
+            os.makedirs(f'/tmp/{dir_name}', exist_ok=True)
+        
+        subprocess.run(['dvc', 'cache', 'dir', '/tmp/dvc-cache'], check=True)
+        
+        env = os.environ.copy()
+        env['DVC_TMP_DIR'] = '/tmp/dvc-tmp'
+        env['DVC_STATE_DIR'] = '/tmp/dvc-state'
+        subprocess.run(['dvc', 'pull'], env=env, check=True)
+    except PermissionError:
+        logger.warning("No se pudo escribir en /tmp. Intentando sin configurar directorios específicos.")
+        try:
+            # Intentar ejecutar dvc pull sin configurar directorios específicos
+            subprocess.run(['dvc', 'pull'], check=True)
+        except subprocess.CalledProcessError as e:
+            logger.error(f"Error al ejecutar dvc pull: {e}")
+            raise
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Error al ejecutar comando DVC: {e}")
+        raise
+    except Exception as e:
+        logger.error(f"Error inesperado: {e}")
+        raise
+
 if os.environ.get('RUN_RENDER', 'false').lower() == 'true':
-    os.makedirs('/tmp/dvc-cache', exist_ok=True)
-    os.makedirs('/tmp/dvc-tmp', exist_ok=True)
-    os.makedirs('/tmp/dvc-state', exist_ok=True)
-    
-    subprocess.run(['dvc', 'cache', 'dir', '/tmp/dvc-cache'], check=True)
-    env = os.environ.copy()
-    env['DVC_TMP_DIR'] = '/tmp/dvc-tmp'
-    env['DVC_STATE_DIR'] = '/tmp/dvc-state'
-    subprocess.run(['dvc', 'pull'], env=env, check=True)
+    logger.info("Ejecutando comandos DVC...")
+    run_dvc_commands()
+    logger.info("Comandos DVC completados.")
 
 
 current_directory = os.path.dirname(os.path.realpath(__file__))
