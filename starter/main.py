@@ -28,19 +28,17 @@ def run_dvc_commands():
         os.makedirs('/tmp/dvc-state', exist_ok=True)
 
         # Configurar DVC para usar los directorios temporales
-        logger.info("Configurando DVC...")
+        logger.info("Aplicando configuración local de DVC...")
         subprocess.run(['dvc', 'config', 'cache.dir', '/tmp/dvc-cache'], check=True)
 
-        # Ejecutar dvc pull con las variables de entorno
-        logger.info("Ejecutando dvc pull...")
-        env = os.environ.copy()
-        env['DVC_TMP_DIR'] = '/tmp/dvc-tmp'
-        env['DVC_STATE_DIR'] = '/tmp/dvc-state'
-        
-        logger.info(f"DVC_TMP_DIR: {os.getenv('DVC_TMP_DIR')}")
-        logger.info(f"DVC_STATE_DIR: {os.getenv('DVC_STATE_DIR')}")
-        subprocess.run(['dvc', 'pull'], env=env, check=True)
+        # Verificar configuración en el archivo local
+        subprocess.run(['dvc', 'config', '--local', 'cache.dir', '/tmp/dvc-cache'], check=True)
+        subprocess.run(['dvc', 'config', '--local', 'state.dir', '/tmp/dvc-state'], check=True)
+        subprocess.run(['dvc', 'config', '--local', 'temp.dir', '/tmp/dvc-tmp'], check=True)
 
+        # Ejecutar dvc pull
+        logger.info("Ejecutando dvc pull...")
+        subprocess.run(['dvc', 'pull'], check=True)
         logger.info("dvc pull completado.")
     except subprocess.CalledProcessError as e:
         logger.error(f"Error al ejecutar dvc pull: {e}")
@@ -48,6 +46,7 @@ def run_dvc_commands():
     except Exception as e:
         logger.error(f"Error inesperado: {e}")
         raise
+
 
 if os.environ.get('RUN_RENDER', 'false').lower() == 'true':
     logger.info("Ejecutando comandos DVC...")

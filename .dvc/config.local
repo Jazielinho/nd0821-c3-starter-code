@@ -1,0 +1,8 @@
+[cache]
+    dir = /tmp/dvc-cache
+
+[state]
+    dir = /tmp/dvc-state
+
+[temp]
+    dir = /tmp/dvc-tmp
