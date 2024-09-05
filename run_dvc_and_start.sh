@@ -13,7 +13,7 @@ export DVC_HOME=/tmp/dvc-home  # Forzamos que DVC use /tmp para todas las rutas 
 mkdir -p /tmp/dvc-home
 
 echo "Ejecutando dvc pull..."
-DVC_TMP_DIR=/tmp/dvc-tmp DVC_STATE_DIR=/tmp/dvc-state DVC_HOME=/tmp/dvc-home dvc pull --no-scm
+DVC_TMP_DIR=/tmp/dvc-tmp DVC_STATE_DIR=/tmp/dvc-state DVC_HOME=/tmp/dvc-home dvc pull
 
 # Comprobar si dvc pull fue exitoso
 if [ $? -eq 0 ]; then
