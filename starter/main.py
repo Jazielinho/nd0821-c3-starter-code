@@ -17,28 +17,30 @@ logger = logging.getLogger(__name__)
 
 def run_dvc_commands():
     try:
+        # Verificar que las variables de entorno se configuren correctamente
+        logger.info(f"DVC_TMP_DIR: {os.getenv('DVC_TMP_DIR')}")
+        logger.info(f"DVC_STATE_DIR: {os.getenv('DVC_STATE_DIR')}")
+
         # Crear directorios temporales
         logger.info("Creando directorios temporales...")
         os.makedirs('/tmp/dvc-cache', exist_ok=True)
-        logger.info("Directorios temporales creados1.")
         os.makedirs('/tmp/dvc-tmp', exist_ok=True)
-        logger.info("Directorios temporales creados2.")
         os.makedirs('/tmp/dvc-state', exist_ok=True)
-        logger.info("Directorios temporales creados3.")
 
         # Configurar DVC para usar los directorios temporales
         logger.info("Configurando DVC...")
         subprocess.run(['dvc', 'config', 'cache.dir', '/tmp/dvc-cache'], check=True)
-        logger.info("DVC configurado.")
 
+        # Ejecutar dvc pull con las variables de entorno
         logger.info("Ejecutando dvc pull...")
         env = os.environ.copy()
         env['DVC_TMP_DIR'] = '/tmp/dvc-tmp'
         env['DVC_STATE_DIR'] = '/tmp/dvc-state'
-        logger.info("Ejecutando dvc pull...")
-
-        logger.info("Ejecutando dvc pull...")
+        
+        logger.info(f"DVC_TMP_DIR: {os.getenv('DVC_TMP_DIR')}")
+        logger.info(f"DVC_STATE_DIR: {os.getenv('DVC_STATE_DIR')}")
         subprocess.run(['dvc', 'pull'], env=env, check=True)
+
         logger.info("dvc pull completado.")
     except subprocess.CalledProcessError as e:
         logger.error(f"Error al ejecutar dvc pull: {e}")
