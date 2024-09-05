@@ -7,3 +7,5 @@
     url = https://dagshub.com/Jazielinho/nd0821-c3-starter-code.dvc
 ['remote "myremote"']
     url = s3://udacity.dvc.fastapi
+[cache]
+    dir = /tmp/dvc
