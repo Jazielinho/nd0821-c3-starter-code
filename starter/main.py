@@ -42,7 +42,7 @@ def run_dvc_commands():
 
 
 
-if os.environ.get('RUN_RENDER', 'false').lower() == 'true':
+if os.environ.get('RUN_RENDER', 'false').lower() == 'xD':
     logger.info("Ejecutando comandos DVC...")
     run_dvc_commands()
     logger.info("Comandos DVC completados.")
