@@ -2,11 +2,24 @@
 import pandas as pd
 import joblib
 import os
+import subprocess
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from starter.starter.ml.model import inference
 from starter.starter.ml.data import process_data
+
+
+if os.environ.get('RUN_RENDER', 'false').lower() == 'true':
+    os.makedirs('/tmp/dvc-cache', exist_ok=True)
+    os.makedirs('/tmp/dvc-tmp', exist_ok=True)
+    os.makedirs('/tmp/dvc-state', exist_ok=True)
+    
+    subprocess.run(['dvc', 'cache', 'dir', '/tmp/dvc-cache'], check=True)
+    env = os.environ.copy()
+    env['DVC_TMP_DIR'] = '/tmp/dvc-tmp'
+    env['DVC_STATE_DIR'] = '/tmp/dvc-state'
+    subprocess.run(['dvc', 'pull'], env=env, check=True)
 
 
 current_directory = os.path.dirname(os.path.realpath(__file__))
