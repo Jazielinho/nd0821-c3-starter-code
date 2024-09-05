@@ -1,6 +1,6 @@
 outs:
-- md5: 071f16b1cec64e1ee9bd5d735d2beb66
-  size: 74034217
+- md5: af503d5dad4a933d991969c106536b6b
+  size: 73133897
   isexec: true
   hash: md5
   path: model.joblib

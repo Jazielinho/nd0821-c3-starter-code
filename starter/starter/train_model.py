@@ -8,9 +8,11 @@ import joblib
 import os
 
 # Add the necessary imports for the starter code.
+current_directory = os.path.dirname(os.path.realpath(__file__))
+data_directory = os.path.join(current_directory, "../data")
 
 # Add code to load in the data.
-data = pd.read_csv("starter/data/census.csv")
+data = pd.read_csv(os.path.join(data_directory, "census.csv"))
 
 # Optional enhancement, use K-fold cross validation instead of a train-test split.
 train, test = train_test_split(data, test_size=0.20)
@@ -41,7 +43,6 @@ test_preds = inference(model, X_test)
 precision, recall, fbeta = compute_model_metrics(y_test, test_preds)
 
 
-current_directory = os.path.dirname(os.path.realpath(__file__))
 model_directory = os.path.join(current_directory, "../model")
 
 # save model
