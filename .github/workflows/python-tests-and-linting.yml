@@ -29,13 +29,15 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
+    - name: Initialice dvc
+      run: |
+            dvc init -f
     - name: Set up DVC remote
       run: |
-        dvc remote add -d s3 s3://udacity.dvc.fastapi
+        dvc remote add -d myremote s3://udacity.dvc.fastapi
         dvc remote modify myremote --local use_ssl false
     - name: Pull data with DVC from s3
       run: |
-        dvc init -f
         dvc pull
     - name: Lint with flake8
       run: |
