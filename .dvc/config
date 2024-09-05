@@ -8,4 +8,4 @@
 ['remote "myremote"']
     url = s3://udacity.dvc.fastapi
 [cache]
-    dir = /tmp/dvc
+    dir = /tmp/dvc-cache

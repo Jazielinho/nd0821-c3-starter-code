@@ -14,26 +14,24 @@ from starter.starter.ml.data import process_data
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 def run_dvc_commands():
     try:
-        for dir_name in ['dvc-cache', 'dvc-tmp', 'dvc-state']:
-            os.makedirs(f'/tmp/{dir_name}', exist_ok=True)
-        
-        subprocess.run(['dvc', 'cache', 'dir', '/tmp/dvc-cache'], check=True)
-        
+        # Crear directorios temporales
+        os.makedirs('/tmp/dvc-cache', exist_ok=True)
+        os.makedirs('/tmp/dvc-tmp', exist_ok=True)
+        os.makedirs('/tmp/dvc-state', exist_ok=True)
+
+        # Configurar DVC para usar los directorios temporales
+        subprocess.run(['dvc', 'config', 'cache.dir', '/tmp/dvc-cache'], check=True)
+
         env = os.environ.copy()
         env['DVC_TMP_DIR'] = '/tmp/dvc-tmp'
         env['DVC_STATE_DIR'] = '/tmp/dvc-state'
+
         subprocess.run(['dvc', 'pull'], env=env, check=True)
-    except PermissionError:
-        logger.warning("No se pudo escribir en /tmp. Intentando sin configurar directorios específicos.")
-        try:
-            subprocess.run(['dvc', 'pull'], check=True)
-        except subprocess.CalledProcessError as e:
-            logger.error(f"Error al ejecutar dvc pull: {e}")
-            raise
     except subprocess.CalledProcessError as e:
-        logger.error(f"Error al ejecutar comando DVC: {e}")
+        logger.error(f"Error al ejecutar dvc pull: {e}")
         raise
     except Exception as e:
         logger.error(f"Error inesperado: {e}")
