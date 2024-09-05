@@ -1,16 +1,14 @@
 #!/bin/bash
 
 echo "Creando directorios temporales para DVC..."
-mkdir -p /tmp/dvc-cache /tmp/dvc-tmp /tmp/dvc-state
-
+mkdir -p $HOME/dvc-cache $HOME/dvc-state
 echo "Directorios temporales creados."
 
 echo "Configurando la caché de DVC para usar los directorios temporales..."
-dvc cache dir /tmp/dvc-cache
-export DVC_TMP_DIR=/tmp/dvc-tmp
-export DVC_STATE_DIR=/tmp/dvc-state
-export DVC_HOME=/tmp/dvc-home  # Usamos /tmp para evitar /var/tmp
-mkdir -p /tmp/dvc-home
+dvc config cache.dir $HOME/dvc-cache
+dvc config state.dir $HOME/dvc-state
+dvc config cache.type symlink
+dvc config cache.shared group
 
 echo "Ejecutando dvc pull para descargar los archivos en sus carpetas originales..."
 dvc pull

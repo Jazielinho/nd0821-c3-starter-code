@@ -15,39 +15,6 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def run_dvc_commands():
-    try:
-        # Verificar que las variables de entorno se configuren correctamente
-        logger.info(f"DVC_TMP_DIR: {os.getenv('DVC_TMP_DIR')}")
-        logger.info(f"DVC_STATE_DIR: {os.getenv('DVC_STATE_DIR')}")
-
-        # Crear directorios temporales
-        logger.info("Creando directorios temporales...")
-        os.makedirs('/tmp/dvc-cache', exist_ok=True)
-        os.makedirs('/tmp/dvc-tmp', exist_ok=True)
-        os.makedirs('/tmp/dvc-state', exist_ok=True)
-
-        # No es necesario ejecutar dvc config aquí, ya que usamos config.local
-        # Ejecutar dvc pull
-        logger.info("Ejecutando dvc pull...")
-        subprocess.run(['dvc', 'pull'], check=True)
-
-        logger.info("dvc pull completado.")
-    except subprocess.CalledProcessError as e:
-        logger.error(f"Error al ejecutar dvc pull: {e}")
-        raise
-    except Exception as e:
-        logger.error(f"Error inesperado: {e}")
-        raise
-
-
-
-if os.environ.get('RUN_RENDER', 'false').lower() == 'xD':
-    logger.info("Ejecutando comandos DVC...")
-    run_dvc_commands()
-    logger.info("Comandos DVC completados.")
-
-
 current_directory = os.path.dirname(os.path.realpath(__file__))
 model_directory = os.path.join(current_directory, "model")
 
