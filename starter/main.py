@@ -28,7 +28,6 @@ def run_dvc_commands():
     except PermissionError:
         logger.warning("No se pudo escribir en /tmp. Intentando sin configurar directorios específicos.")
         try:
-            # Intentar ejecutar dvc pull sin configurar directorios específicos
             subprocess.run(['dvc', 'pull'], check=True)
         except subprocess.CalledProcessError as e:
             logger.error(f"Error al ejecutar dvc pull: {e}")
