@@ -1,3 +1,18 @@
+
+CI images:
+
+![img.png](img.png)
+
+
+Render app:
+![img_1.png](img_1.png)
+
+Render urls:
+- healthcheck: 'https://nd0821-c3-starter-code-1-9cz9.onrender.com/'
+- predict: 'https://nd0821-c3-starter-code-1-9cz9.onrender.com/predict'
+
+
+
 Working in a command line environment is recommended for ease of use with git and dvc. If on Windows, WSL1 or 2 is recommended.
 
 # Environment Set up
