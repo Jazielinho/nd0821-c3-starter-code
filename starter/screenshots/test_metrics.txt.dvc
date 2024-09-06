@@ -1,0 +1,6 @@
+outs:
+- md5: 33dccb6955c42b9d5f4d9adf31b9789c
+  size: 82
+  isexec: true
+  hash: md5
+  path: test_metrics.txt

@@ -39,9 +39,16 @@ X_test, y_test, _, _ = process_data(
 # Train and save a model.
 model = train_model(X_train, y_train)
 
-test_preds = inference(model, X_test)
-precision, recall, fbeta = compute_model_metrics(y_test, test_preds)
+precision, recall, fbeta = compute_model_metrics(y_test, inference(model, X_test))
+train_precision, train_recall, train_fbeta = compute_model_metrics(y_train, inference(model, X_train))
 
+# save metrics into screenshots folder
+metrics_directory = os.path.join(current_directory, "../screenshots")
+with open(os.path.join(metrics_directory, "test_metrics.txt"), "w") as outfile:
+    outfile.write(f"Precision: {precision}\nRecall: {recall}\nFbeta: {fbeta}")
+
+with open(os.path.join(metrics_directory, "train_metrics.txt"), "w") as outfile:
+    outfile.write(f"Precision: {train_precision}\nRecall: {train_recall}\nFbeta: {train_fbeta}")
 
 model_directory = os.path.join(current_directory, "../model")
 
