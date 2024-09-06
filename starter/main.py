@@ -2,8 +2,9 @@
 import pandas as pd
 import joblib
 import os
-import subprocess
 import logging
+import boto3
+import io
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
@@ -15,12 +16,43 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-current_directory = os.path.dirname(os.path.realpath(__file__))
-model_directory = os.path.join(current_directory, "model")
+if os.environ.get("RUN_RENDER", 'false').lower() == 'true':
+    logger.info("In Render")
+    bucket_name = 'udacity.dvc.fastapi'
 
-model = joblib.load(os.path.join(model_directory, "model.joblib"))
-encoder = joblib.load(os.path.join(model_directory, "encoder.joblib"))
-lb = joblib.load(os.path.join(model_directory, "lb.joblib"))
+    s3 = boto3.client('s3')
+
+    logger.info("Downloading model from S3")
+    model_s3_key = 'files/md5/bb/df67e5d72b986a167a92e448165136'
+    model_in_memory = io.BytesIO()
+    s3.download_fileobj(bucket_name, model_s3_key, model_in_memory)
+    model_in_memory.seek(0)
+    model = joblib.load(model_in_memory)
+    logger.info("Model downloaded")
+
+    logger.info("Downloading encoder from S3")
+    encoder_s3_key = 'files/md5/67/1137fde4e14aa3798df1330ebf6533'
+    encoder_in_memory = io.BytesIO()
+    s3.download_fileobj(bucket_name, encoder_s3_key, encoder_in_memory)
+    encoder_in_memory.seek(0)
+    encoder = joblib.load(encoder_in_memory)
+    logger.info("Encoder downloaded")
+
+    logger.info("Downloading lb from S3")
+    lb_s3_key = 'files/md5/cd/49d8bf0d8408a57a516b72247936c3'
+    lb_in_memory = io.BytesIO()
+    s3.download_fileobj(bucket_name, lb_s3_key, lb_in_memory)
+    lb_in_memory.seek(0)
+    lb = joblib.load(lb_in_memory)
+    logger.info("lb downloaded")
+else:
+    logger.info("Not in Render")
+    current_directory = os.path.dirname(os.path.realpath(__file__))
+    model_directory = os.path.join(current_directory, "model")
+
+    model = joblib.load(os.path.join(model_directory, "model.joblib"))
+    encoder = joblib.load(os.path.join(model_directory, "encoder.joblib"))
+    lb = joblib.load(os.path.join(model_directory, "lb.joblib"))
 
 
 app = FastAPI()
