@@ -23,7 +23,7 @@ if os.environ.get("RUN_RENDER", 'false').lower() == 'true':
     s3 = boto3.client('s3')
 
     logger.info("Downloading model from S3")
-    model_s3_key = 'files/md5/a5/940d9f5edfd3b3a112840f094695b3'
+    model_s3_key = 'files/md5/c0/e67a811d65f2e5e99e948d0e4e42a5'
     model_in_memory = io.BytesIO()
     s3.download_fileobj(bucket_name, model_s3_key, model_in_memory)
     model_in_memory.seek(0)
@@ -31,7 +31,7 @@ if os.environ.get("RUN_RENDER", 'false').lower() == 'true':
     logger.info("Model downloaded")
 
     logger.info("Downloading encoder from S3")
-    encoder_s3_key = 'files/md5/67/1137fde4e14aa3798df1330ebf6533'
+    encoder_s3_key = 'files/md5/26/934c498a22a7589cbd20c4a9cb5297'
     encoder_in_memory = io.BytesIO()
     s3.download_fileobj(bucket_name, encoder_s3_key, encoder_in_memory)
     encoder_in_memory.seek(0)

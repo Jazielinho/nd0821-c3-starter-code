@@ -42,6 +42,26 @@ model = train_model(X_train, y_train)
 precision, recall, fbeta = compute_model_metrics(y_test, inference(model, X_test))
 train_precision, train_recall, train_fbeta = compute_model_metrics(y_train, inference(model, X_train))
 
+''' metrics by race and sex '''
+metrics_by_race = {}
+
+for race in data['race'].unique():
+    _test = test[test['race'] == race]
+    _X_test, _y_test, _, _ = process_data(
+        _test, categorical_features=cat_features, label="salary", training=False, encoder=encoder, lb=lb
+    )
+    metrics_by_race[race] = compute_model_metrics(_y_test, inference(model, _X_test))
+
+metrics_by_sex = {}
+
+for sex in data['sex'].unique():
+    _test = test[test['sex'] == sex]
+    _X_test, _y_test, _, _ = process_data(
+        _test, categorical_features=cat_features, label="salary", training=False, encoder=encoder, lb=lb
+    )
+    metrics_by_sex[sex] = compute_model_metrics(_y_test, inference(model, _X_test))
+
+
 # save metrics into screenshots folder
 metrics_directory = os.path.join(current_directory, "../screenshots")
 with open(os.path.join(metrics_directory, "test_metrics.txt"), "w") as outfile:
@@ -49,6 +69,15 @@ with open(os.path.join(metrics_directory, "test_metrics.txt"), "w") as outfile:
 
 with open(os.path.join(metrics_directory, "train_metrics.txt"), "w") as outfile:
     outfile.write(f"Precision: {train_precision}\nRecall: {train_recall}\nFbeta: {train_fbeta}")
+
+with open(os.path.join(metrics_directory, "metrics_by_race.txt"), "w") as outfile:
+    for race, metrics in metrics_by_race.items():
+        outfile.write(f"Race: {race}\nPrecision: {metrics[0]}\nRecall: {metrics[1]}\nFbeta: {metrics[2]}\n\n")
+
+with open(os.path.join(metrics_directory, "metrics_by_sex.txt"), "w") as outfile:
+    for sex, metrics in metrics_by_sex.items():
+        outfile.write(f"Sex: {sex}\nPrecision: {metrics[0]}\nRecall: {metrics[1]}\nFbeta: {metrics[2]}\n\n")
+
 
 model_directory = os.path.join(current_directory, "../model")
 
