@@ -11,6 +11,7 @@ def data():
     data = pd.read_csv('starter/data/census.csv')
     return data
 
+
 @pytest.fixture(scope='module')
 def X_y(data):
     cat_features = [
@@ -33,7 +34,7 @@ def test_train_model(X_y):
     X, y = X_y
     model = train_model(X, y)
     assert model is not None
-    assert type(model) == type(RandomForestClassifier())
+    assert isinstance(model, RandomForestClassifier)
 
 
 def test_compute_model_metrics(X_y):

@@ -1,6 +1,6 @@
 outs:
-- md5: 55ac8d091a4a431db85996893405eb73
-  size: 66
+- md5: f9eae61d2d97ec3b18b1af7bb3716031
+  size: 101
   isexec: true
   hash: md5
   path: train_metrics.txt

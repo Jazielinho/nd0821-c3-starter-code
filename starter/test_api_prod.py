@@ -32,4 +32,3 @@ def test_predict():
     response = requests.post(url_predict, json=data)
     assert response.status_code == 200
     assert response.json() == {"prediction": "<50k"}
-

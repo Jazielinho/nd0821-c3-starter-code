@@ -1,7 +1,6 @@
 
-import json
 from fastapi.testclient import TestClient
-from main import app, DataIn, DataOut
+from main import app, DataIn
 
 
 client = TestClient(app)
@@ -32,5 +31,3 @@ def test_predict():
     response = client.post("/predict", json=data_in.dict())
     assert response.status_code == 200
     assert response.json() == {"prediction": "<50k"}
-    
-    
