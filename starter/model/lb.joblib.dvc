@@ -3,3 +3,4 @@ outs:
   size: 455
   hash: md5
   path: lb.joblib
+  isexec: true

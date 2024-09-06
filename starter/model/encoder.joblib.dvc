@@ -3,3 +3,4 @@ outs:
   size: 4235
   hash: md5
   path: encoder.joblib
+  isexec: true
